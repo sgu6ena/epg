@@ -1,0 +1,135 @@
+.header {
+    background: orange;
+}
+
+.input-login {
+    width: 150px;
+    margin-right: 10px;
+}
+
+.input-password {
+    width: 150px;
+    margin-right: 10px;
+}
+
+.chanel-list {
+    overflow: auto;
+    height: 800px;
+}
+
+.channelEPG {
+    overflow: auto;
+    height: 800px;
+}
+
+.button-chanel {
+    text-align: left;
+    width: 100%;
+    background: #fff;
+    border: 0;
+}
+
+.button-chanel:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.button-chanel:focus {
+    background-color: orange;
+    color: black;
+    border: 0;
+}
+
+.logo-img {
+    max-height: 50px;
+}
+
+.number-channel {
+    font-size: 14px;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+.name-channel {
+    font-size: 14px;
+    font-weight: 900;
+    margin: 0 0px;
+}
+
+.id-channel {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 2px;
+}
+
+.logo-chanel {
+    padding: 0;
+    height: 44px;
+    text-align: left;
+    border-radius: 8px;
+    float: left;
+}
+
+.channel-card {
+    min-width: 400px;
+    margin-top: 40px;
+    height: 150px;
+    overflow: hidden;
+}
+
+.live-tv {
+    font-size: 12px;
+    margin-left: 4px;
+    padding: 0;
+    margin-bottom: 6px;
+}
+
+.groups-title {
+    /* display: block; */
+    text-transform: uppercase;
+    float: right;
+    background: orangered;
+    color: #fff;
+    padding: 0 5px;
+    margin-top: 15px;
+    border-radius: 8px;
+    text-align: right;
+}
+
+p {
+    margin: 0;
+}
+
+.hr {
+    margin: 2px;
+}
+
+.hr-group {
+    margin: 2px;
+}
+
+.img-tv {
+    height: 75px;
+}
+
+.time-begin {
+    font-weight: 600;
+}
+
+.time-end {
+    font-weight: 600;
+}
+
+.name {
+    margin: 0 10px;
+    font-weight: 700;
+}
+
+.description {
+    font-size: 12px;
+}
+
+.epg-card {
+    max-height: 200px;
+    display: block;
+}
