@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPG V3</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+
+    <script src="js/main.js" defer></script>
+    <script src="js/EPGv3.js" defer></script>
+
+
+
+
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="row d-flex align-items-center p-2 ">
+                <div class="col-md-3">
+                    <a href=" # " class="logo ">
+                        <img src="img/logo-black.png " alt="KARINA.TV " class="logo-img ">
+                    </a>
+                </div>
+                <!-- /.col-6 -->
+                <div class="col-md-9 d-flex justify-content-end ">
+                    <input type="text " class="input-login " id="code_login" placeholder="ABO" maxlength="8" value="">
+                    <input type="password" class="input-password " id="code_pass" placeholder="PASS" maxlength="8" value="">
+                    <button type="button " class="btn btn-dark " id="btlogin" value="login" onclick="submit()">Login</button>
+                </div>
+                <!-- /.col-6 -->
+            </div>
+            <!-- /.row -->
+        </div>
+    </header>
+    <div class="alerts" id="alerts">
+    </div>
+
+    <div class="container-fluid" id="showepg">
+        <div class="row d-flex align-items-center channel-name ">
+            <div class="col-3 chanel-list " id="epg">
+                <!-- TODO сделать вывод программы передач -->
+
+            </div>
+            <div class="col-4 channelEPG" id="channelEPG">
+                <!-- TODO Вывод плеера + описания передачи  -->
+            </div>
+
+            <!-- row -->
+        </div>
+        <!-- container-fluid -->
+
+
+</body>
+
+</html>
