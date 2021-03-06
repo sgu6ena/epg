@@ -102,6 +102,10 @@ function authErr() {
 
 let divEpg = document.getElementById('epg');
 
+let divChannelEpg = document.getElementById('channelEPG');
+
+let divShowProgramm = document.getElementById('showProgramm');
+// список каналов и передача в лайве
 function showEPGv3() {
     let urlv3 = 'https://iptv.kartina.tv/api/json/v3/channels?MW_SSID=' + getCookie('SSID');
     divEpg.innerHTML = "";
@@ -118,7 +122,7 @@ function showEPGv3() {
                 for (let j = 0; j < chan.length; j++) {
                     number++; //номер канала
                     divEpg.insertAdjacentHTML('beforeend', `  
-                    <button class="button-chanel" id="${chan[j].id}"  onclick="showEpg(${chan[j].id})">                    
+                    <button class="button-chanel" id="${chan[j].id}"  onclick="showEpg(${chan[j].id},0)">                    
                             <img src="${chan[j].logo}" alt="logo" class="logo-chanel">
                                 <span class="number-channel">${number}.</span> 
                                 <span class="name-channel">${chan[j].title}</span>
@@ -130,6 +134,70 @@ function showEPGv3() {
                 };
             };
         });
+}
+
+//программа передач на день
+function showEpg(channelID, day) {
+    let channelURL = `https://iptv.kartina.tv/api/json/v3/channel/${channelID}/epg?from=${dateInUnix(day)}&to=${dateInUnix(day+1)}&MW_SSID=${getCookie('SSID')}`;
+    divChannelEpg.innerHTML = "";
+    fetch(channelURL)
+        .then(response => response.json())
+        .then(data => {
+            let epg = data.epg;
+            divChannelEpg.insertAdjacentHTML('beforeend', `
+            <div class="change-date">
+                <button class="button-date-prev" onclick="showEpg(${channelID},${day-1})"><</button>
+                ${timetonormaldate(dateInUnix(day)).split(',')[0]}
+                <button class="button-date-prev" onclick="showEpg(${channelID},${day+1})">></button>
+            </div>  `);
+            if (day > 15 || day < -15) { //проверка 2 недели до/после текущей даты
+                divChannelEpg.insertAdjacentHTML('beforeend', `<img src="https://kubsafety.ru/image/catalog/revolution/404error.jpg" alt="нет программ" style="text-align:center">`);
+            } else {
+                for (let i = 0; i < epg.length; i++) {
+                    divChannelEpg.insertAdjacentHTML('beforeend', `
+                <button class="button-chanel" id="${i}"  onclick="showDescription(${channelID},${epg[i].start})"> 
+                <p class="live-tv">&nbsp;${timetonormal(epg[i].start)}-${timetonormal(epg[i].end)} ${epg[i].title}</p>
+                </button>
+                <hr class="hr-epg">
+                `);
+                }
+            };
+        });
+}
+
+//выбранная передача: описание + плеер
+function showDescription(channelID, time) {
+
+    divShowProgramm.innerHTML = "";
+    let programmURL = `https://iptv.kartina.tv/api/json/v3/channel/${channelID}/epg?from=${time}&to=${time}&MW_SSID=${getCookie('SSID')}`;
+    let videoUrl = `https://iptv.kartina.tv/api/json`
+    fetch(programmURL)
+        .then(response => response.json())
+        .then(data => {
+            let epg = data.epg[0];
+
+            fetch(videoUrl + epg._links.archive.path + `?MW_SSID=${getCookie('SSID')}`) // получение ссылки на по воспроизведение + плеер
+                .then(response => response.json())
+                .then(data => {
+                    urls = data['url'];
+                    divShowProgramm.insertAdjacentHTML('beforeend', `
+                    <video class="player" id="livevideo" controls src="${urls}"></video>`);
+                    let video = document.getElementById('livevideo');
+                    let hls = new Hls();
+                    hls.loadSource(video.src); // GC GET VIDEO SRC
+                    hls.attachMedia(video);
+                    divShowProgramm.insertAdjacentHTML('beforeend', `                   
+                    <p class="programm-name">${timetonormal(epg.start)}-${timetonormal(epg.end)} ${epg.title}</p>
+                   <p>${epg.category}. ${epg.genres}. ${epg.year}<p>
+                   <span>${epg.description}</span>
+                   `);
+                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        video.play();
+                    });
+                });
+
+
+        })
 }
 
 function timetonormal(t) {
