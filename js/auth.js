@@ -76,7 +76,7 @@ async function submit() {
 
 
 async function logout() {
-    const url = "https://iptv.kartina.tv/api/json/logout";
+     const url = "https://iptv.kartina.tv/api/json/logout?MW_SSID=" + getCookie('SSID');
     fetch(url)
         .then(response => response.json())
         .then(data => {
