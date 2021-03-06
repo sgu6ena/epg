@@ -1,5 +1,6 @@
 .header {
     background: orange;
+    height: 7vh;
 }
 
 .input-login {
@@ -14,12 +15,12 @@
 
 .chanel-list {
     overflow: auto;
-    height: 800px;
+    height: 93vh;
 }
 
 .channelEPG {
     overflow: auto;
-    height: 800px;
+    height: 93vh;
 }
 
 .button-chanel {
@@ -41,7 +42,7 @@
 }
 
 .logo-img {
-    max-height: 50px;
+    max-height: 5vh;
 }
 
 .number-channel {
@@ -100,8 +101,13 @@ p {
     margin: 0;
 }
 
-.hr {
-    margin: 2px;
+.change-date {
+    display: flex;
+    justify-content: space-between;
+}
+
+.hr-epg {
+    margin: 0px;
 }
 
 .hr-group {
@@ -118,6 +124,19 @@ p {
 
 .time-end {
     font-weight: 600;
+}
+
+.programm-name {
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.img-description {
+    width: 100%;
+}
+
+.player {
+    width: 100%;
 }
 
 .name {
