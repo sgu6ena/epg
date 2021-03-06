@@ -175,7 +175,7 @@ function showDescription(channelID, time) {
         .then(response => response.json())
         .then(data => {
             let epg = data.epg[0];
-
+            console.log(epg);
             fetch(videoUrl + epg._links.archive.path + `?MW_SSID=${getCookie('SSID')}`) // получение ссылки на по воспроизведение + плеер
                 .then(response => response.json())
                 .then(data => {
