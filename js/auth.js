@@ -96,6 +96,11 @@ function authOK() {
     document.getElementById('btlogin').hidden = true;
     document.getElementById('showepg').hidden = false;
     document.getElementById('settings').hidden = false;
+        fetch(`https://iptv.kartina.tv/api/json/settings_set?var=stream_standard&val=hls_h264&MW_SSID=${getCookie('SSID')}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log("hls - ok!");
+        });
     showEPGv3(); // заполняем епг в3
 }
 
