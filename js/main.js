@@ -1,105 +1,3 @@
-let divAlerts = document.getElementById('alerts');
-let input_login = document.getElementById("code_login");
-let input_pass = document.getElementById("code_pass");
-// возвращает куки с указанным name,
-// или undefined, если ничего не найдено
-function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-
-//авторизация при загрузке страницы
-window.onload = () => {
-    auth();
-}
-
-function auth() {
-    console.log(getCookie('SSID'));
-    if (getCookie('SSID') != undefined) { //TODO проверка данных аккаунта
-        account(getCookie('SSID'));
-        console.log('3');
-        //
-    } else {
-        if (getCookie('login') != undefined && getCookie('password') != undefined) {
-            login(getCookie('login'), getCookie('password'));
-            console.log('4');
-        } else {
-            authErr();
-            console.log('5');
-        };
-    };
-}
-
-function account(SSID) {
-    let AccountUrl = "https://iptv.kartina.tv/api/json/account?MW_SSID=" + SSID;
-    fetch(AccountUrl)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                authErr();
-                console.log('1');
-                return (false);
-            } else {
-                authOK();
-                console.log('2');
-                console.log(data);
-                return (true);
-            }
-        });
-}
-
-
-function login(UserName, UserPassword) {
-    let LoginUrl = "https://iptv.kartina.tv/api/json/login?login=" + UserName + "&pass=" + UserPassword + "&softid=web-ktv-003";
-    fetch(LoginUrl)
-        .then(response => response.json())
-        .then(data => {
-            let SSID = data['sid']; //берем MW_SSID
-            if (account(SSID) != false) {
-                document.cookie = "login=" + UserName; //сохраняем в куки логин
-                document.cookie = "password=" + UserPassword; //сохраняем в куки пасс
-                document.cookie = ("SSID=" + SSID); //сохраняем ссид
-            } else {
-                authErr();
-            };
-        });
-    // auth();
-}
-
-async function submit() {
-    let UserName = document.getElementById("code_login").value,
-        UserPassword = document.getElementById("code_pass").value;
-    login(UserName, UserPassword);
-}
-
-function authOK() {
-    divAlerts.insertAdjacentHTML('beforeend', `<div class="alert alert-success" role="alert">
-    Авторизация успешна!
-    </div>`);
-    setTimeout(function() { divAlerts.innerHTML = "" }, 2000);
-    document.getElementById("code_login").hidden = true;
-    document.getElementById("code_pass").hidden = true;
-    document.getElementById('btlogin').hidden = true;
-    document.getElementById('showepg').hidden = false;
-    showEPGv3(); // заполняем епг в3
-}
-
-function authErr() {
-    divAlerts.insertAdjacentHTML('beforeend', `<div class="alert alert-danger" role="alert">
-    Вам необходимо авторизироваться!
-    </div>`);
-    setTimeout(function() { divAlerts.innerHTML = "" }, 3000);
-    document.getElementById("code_login").hidden = false;
-    document.getElementById("code_pass").hidden = false;
-    document.getElementById('btlogin').hidden = false;
-    document.getElementById('showepg').hidden = true;
-
-}
-
-
-
 let divEpg = document.getElementById('epg');
 
 let divChannelEpg = document.getElementById('channelEPG');
@@ -120,9 +18,11 @@ function showEPGv3() {
                 let chan = groups[i].channels;
                 divEpg.insertAdjacentHTML('beforeend', `<hr class="hr-group"> <h3 class="groups-logo">${groups[i].title}</h3><hr class="hr-group">`);
                 for (let j = 0; j < chan.length; j++) {
-                    number++; //номер канала
+                    number++;
+
+                    //номер канала
                     divEpg.insertAdjacentHTML('beforeend', `  
-                    <button class="button-chanel" id="${chan[j].id}"  onclick="showEpg(${chan[j].id},0)">                    
+                    <button class="button-chanel" id="${chan[j].id}"  onclick="showEpg(${chan[j].id},0, '${chan[j].title}', '${chan[j].logo}')">                    
                             <img src="${chan[j].logo}" alt="logo" class="logo-chanel">
                                 <span class="number-channel">${number}.</span> 
                                 <span class="name-channel">${chan[j].title}</span>
@@ -137,19 +37,28 @@ function showEPGv3() {
 }
 
 //программа передач на день
-function showEpg(channelID, day) {
+function showEpg(channelID, day, channelTitle, channelLogo) {
     let channelURL = `https://iptv.kartina.tv/api/json/v3/channel/${channelID}/epg?from=${dateInUnix(day)}&to=${dateInUnix(day+1)}&MW_SSID=${getCookie('SSID')}`;
     divChannelEpg.innerHTML = "";
+    divChannelEpg.insertAdjacentHTML('beforeend', `<hr class="hr-group">
+                <div class='channel-wrapper'>
+                    <img src="${channelLogo}" alt="logo" class="logo-chanel">
+                    <span class="name-channel-mono">${channelTitle}</span>
+                    <span class="id-channel">(${channelID})</span>
+              </div>
+              <hr class="hr-group">`);
+
     fetch(channelURL)
         .then(response => response.json())
         .then(data => {
             let epg = data.epg;
             divChannelEpg.insertAdjacentHTML('beforeend', `
             <div class="change-date">
-                <button class="button-date-prev" onclick="showEpg(${channelID},${day-1})"><</button>
+                <button class="button-date-prev button-date" onclick="showEpg(${channelID},${day-1},'${channelTitle}', '${channelLogo}')"><</button>
                 ${timetonormaldate(dateInUnix(day)).split(',')[0]}
-                <button class="button-date-prev" onclick="showEpg(${channelID},${day+1})">></button>
-            </div>  `);
+                <button class="button-date-prev button-date" onclick="showEpg(${channelID},${day+1},'${channelTitle}', '${channelLogo}')">></button>
+            </div> 
+            <hr class="hr-group">`);
             if (day > 15 || day < -15) { //проверка 2 недели до/после текущей даты
                 divChannelEpg.insertAdjacentHTML('beforeend', `<img src="https://kubsafety.ru/image/catalog/revolution/404error.jpg" alt="нет программ" style="text-align:center">`);
             } else {
@@ -158,7 +67,7 @@ function showEpg(channelID, day) {
                 <button class="button-chanel" id="${i}"  onclick="showDescription(${channelID},${epg[i].start})"> 
                 <p class="live-tv">&nbsp;${timetonormal(epg[i].start)}-${timetonormal(epg[i].end)} ${epg[i].title}</p>
                 </button>
-                <hr class="hr-epg">
+                
                 `);
                 }
             };
@@ -175,7 +84,7 @@ function showDescription(channelID, time) {
         .then(response => response.json())
         .then(data => {
             let epg = data.epg[0];
-            console.log(epg);
+
             fetch(videoUrl + epg._links.play.path + `?MW_SSID=${getCookie('SSID')}`) // получение ссылки на по воспроизведение + плеер
                 .then(response => response.json())
                 .then(data => {
@@ -215,7 +124,7 @@ function timetonormaldate(t) {
         hour: '2-digit',
         minute: '2-digit',
         day: '2-digit',
-        month: 'short'
+        month: 'long'
     });
     return (s);
 }

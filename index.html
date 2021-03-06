@@ -11,21 +11,15 @@
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="css/bootstrap.css">
 
-
+    <script src="js/auth.js" defer></script>
     <script src="js/main.js" defer></script>
     <script src="js/hls.js" defer></script>
-
-
-
-
-
-
 
 </head>
 
 <body>
     <header class="header">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row d-flex align-items-center p-2 ">
                 <div class="col-md-3">
                     <a href=" # " class="logo ">
@@ -37,6 +31,12 @@
                     <input type="text " class="input-login " id="code_login" placeholder="ABO" maxlength="8" value="">
                     <input type="password" class="input-password " id="code_pass" placeholder="PASS" maxlength="8" value="">
                     <button type="button " class="btn btn-dark " id="btlogin" value="login" onclick="submit()">Login</button>
+                    <button class="settings-button" onclick="logout()" id="settings">                    
+
+                            <img src="img/settings.png" alt="settings" class="settings-icon">
+
+                    </button>
+
                 </div>
                 <!-- /.col-6 -->
             </div>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="container-fluid" id="showepg">
-        <div class="row d-flex align-items-center channel-name ">
+        <div class="row channel-name ">
             <div class="col-3 chanel-list " id="epg">
 
             </div>

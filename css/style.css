@@ -13,6 +13,15 @@
     margin-right: 10px;
 }
 
+.settings-icon {
+    width: 5vh;
+}
+
+.settings-button {
+    background: none;
+    border: none;
+}
+
 .chanel-list {
     overflow: auto;
     height: 93vh;
@@ -51,10 +60,24 @@
     margin-left: 4px;
 }
 
+.channel-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+}
+
 .name-channel {
     font-size: 14px;
     font-weight: 900;
     margin: 0 0px;
+}
+
+.name-channel-mono {
+    font-size: 18px;
+    font-weight: 900;
+    margin: 0 0px;
+    padding: 5px;
+    text-transform: uppercase;
 }
 
 .id-channel {
@@ -69,6 +92,12 @@
     text-align: left;
     border-radius: 8px;
     float: left;
+}
+
+.button-date {
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
 }
 
 .channel-card {
