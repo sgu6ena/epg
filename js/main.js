@@ -220,27 +220,10 @@ function timetonormaldate(t) {
     return (s);
 }
 
-let divChannelEpg = document.getElementById('channelEPG');
-
-function showEpg(channelID) {
-    let channelURL = `https://iptv.kartina.tv/api/json/v3/channel/${channelID}/epg?MW_SSID=${getCookie('SSID')}`;
-    divChannelEpg.innerHTML = "";
-    fetch(channelURL)
-        .then(response => response.json())
-        .then(data => {
-            let epg = data.epg;
-            for (let i = 0; i < epg.length; i++) {
-                divChannelEpg.insertAdjacentHTML('beforeend', `
-                <button class="button-chanel" id="${i}"  onclick="showDescription(${i})"> 
-                <p class="live-tv">&nbsp;${timetonormaldate(epg[i].start)}-${timetonormal(epg[i].end)} ${epg[i].title}</p>
-                </button>
-                <hr>
-                `);
-                //  console.log(epg[i].title);
-            };
-        });
-}
-
-function showDescription(i) {
-    console.log(i);
+function dateInUnix(day) {
+    let time = new Date();
+    let timeInS = Date.now();
+    //сегодня = время -   милисекуны            -   секунды * 1000мсек       -минуты * 60сек * 1000мсек     - часы * 60мин * 60сек * 1000мсек
+    let returntime = (timeInS - time.getMilliseconds()) / 1000 - time.getSeconds() - time.getMinutes() * 60 - time.getHours() * 60 * 60 + day * 86400;
+    return returntime;
 }
