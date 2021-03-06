@@ -52,7 +52,7 @@ function account(SSID) {
 
 
 function login(UserName, UserPassword) {
-    let LoginUrl = "https://iptv.kartina.tv/api/json/login?login=" + UserName + "&pass=" + UserPassword;
+    let LoginUrl = "https://iptv.kartina.tv/api/json/login?login=" + UserName + "&pass=" + UserPassword + "&softid=web-ktv-003";
     fetch(LoginUrl)
         .then(response => response.json())
         .then(data => {
