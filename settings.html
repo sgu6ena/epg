@@ -7,11 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EPG V3</title>
 
-    <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="css/bootstrap.css">
-
+    <link rel="stylesheet" href="css/header.css">
 
     <script src="js/auth.js" defer></script>
     <script src="js/main.js" defer></script>
@@ -24,40 +23,29 @@
         <div class="container-fluid">
             <div class="row d-flex align-items-center p-2 ">
                 <div class="col-md-3">
-                    <a href=" # " class="logo ">
+                    <a href="/index.html" class="logo ">
                         <img src="img/logo.svg" alt="KARINA.TV " class="logo-img ">
                     </a>
                 </div>
                 <!-- /.col-6 -->
                 <div class="col-md-9 d-flex justify-content-end ">
-                    <input type="text " class="input-login " id="code_login" placeholder="ABO" maxlength="8" value="">
-                    <input type="password" class="input-password " id="code_pass" placeholder="PASS" maxlength="8" value="">
-                    <button type="button " class="btn btn-dark " id="btlogin" value="login" onclick="submit()">Login</button>
-                    <a href="settings.html" class="setting" id="setting"> <img src="img/settings.svg" alt="settings" class="settings-icon" id="settings"> </a>
+
+
+
+                    <a href="settings.html" class="setting"> <img src="img/settings.svg" alt="settings" class="settings-icon"> </a>
+
                 </div>
                 <!-- /.col-6 -->
             </div>
             <!-- /.row -->
         </div>
     </header>
-    <div class="alerts" id="alerts">
-    </div>
-    <div class="container-fluid" id="showepg">
-        <div class="row channel-name ">
-            <div class="col-3 chanel-list " id="epg">
 
-            </div>
-            <div class="col-4 channelEPG" id="channelEPG">
-
-            </div>
-            <div class="col-5 show-programm" id="showProgramm">
-
-            </div>
-
-            <!-- row -->
-        </div>
-        <!-- container-fluid -->
-
+    <div class="d-flex justify-content-center mt-3">
+        <button type="button " class="btn btn-dark" onclick="logout()" id="settings">                    
+            <img src="img/exit.png" alt="settings" class="settings-icon"> Выход
+        </button>
+        <div>
 </body>
 
 </html>

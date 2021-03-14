@@ -40,25 +40,25 @@ function showEPGv3() {
 function showEpg(channelID, day, channelTitle, channelLogo) {
     let channelURL = `https://iptv.kartina.tv/api/json/v3/channel/${channelID}/epg?from=${dateInUnix(day)}&to=${dateInUnix(day+1)}&MW_SSID=${getCookie('SSID')}`;
     divChannelEpg.innerHTML = "";
-    divChannelEpg.insertAdjacentHTML('beforeend', `<hr class="hr-group">
+    divChannelEpg.insertAdjacentHTML('beforeend', `
                 <div class='channel-wrapper'>
-                    <img src="${channelLogo}" alt="logo" class="logo-chanel">
+                    <img src="${channelLogo}" alt="logo" class="logo-chanel-mono">
                     <span class="name-channel-mono">${channelTitle}</span>
                     <span class="id-channel">(${channelID})</span>
               </div>
-              <hr class="hr-group">`);
-
+             `);
+    //<hr class="hr-group">
     fetch(channelURL)
         .then(response => response.json())
         .then(data => {
             let epg = data.epg;
             divChannelEpg.insertAdjacentHTML('beforeend', `
             <div class="change-date">
-                <button class="button-date-prev button-date" onclick="showEpg(${channelID},${day-1},'${channelTitle}', '${channelLogo}')"><</button>
+                <button class="button-date-prev button-date" onclick="showEpg(${channelID},${day-1},'${channelTitle}', '${channelLogo}')">&#9668;</button>
                 ${timetonormaldate(dateInUnix(day)).split(',')[0]}
-                <button class="button-date-prev button-date" onclick="showEpg(${channelID},${day+1},'${channelTitle}', '${channelLogo}')">></button>
+                <button class="button-date-prev button-date" onclick="showEpg(${channelID},${day+1},'${channelTitle}', '${channelLogo}')">&#9658;</button>
             </div> 
-            <hr class="hr-group">`);
+           `);
             if (day > 15 || day < -15) { //проверка 2 недели до/после текущей даты
                 divChannelEpg.insertAdjacentHTML('beforeend', `<img src="https://kubsafety.ru/image/catalog/revolution/404error.jpg" alt="нет программ" style="text-align:center">`);
             } else {
@@ -97,11 +97,11 @@ function showDescription(channelID, time) {
                     hls.attachMedia(video);
                     divShowProgramm.insertAdjacentHTML('beforeend', `                   
                     <p class="programm-name">${timetonormal(epg.start)}-${timetonormal(epg.end)} ${epg.title}</p>
-                   <p>${epg.category}. ${epg.genres}. ${epg.year}<p>
+                   <p>${epg.category?epg.category + '.':''} ${epg.genres?epg.genres + '.':''} ${epg.year?epg.year + '.':''}<p>
                    <span>${epg.description}</span>
                    `);
                     hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                        video.play();
+                        video.pause();
                     });
                 });
 

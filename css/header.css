@@ -1,0 +1,30 @@
+:root {
+    --color--1: orange;
+    --color--2: white;
+    --color--3: black;
+    --color--4: black;
+}
+
+.header {
+    background: var(--color--1);
+    height: 7vh;
+}
+
+.input-login {
+    width: 150px;
+    margin-right: 10px;
+}
+
+.input-password {
+    width: 150px;
+    margin-right: 10px;
+}
+
+.settings-icon {
+    width: 30px;
+}
+
+.settings-button {
+    /* background: none; */
+    border: none;
+}

@@ -16,7 +16,7 @@ window.onload = () => {
 
 function auth() {
     console.log(getCookie('SSID'));
-    if (getCookie('SSID') != undefined) { //TODO проверка данных аккаунта
+    if (getCookie('SSID') != undefined) {
         account(getCookie('SSID'));
         console.log('3');
         //
@@ -50,7 +50,7 @@ function account(SSID) {
 }
 
 function login(UserName, UserPassword) {
-    let LoginUrl = "https://iptv.kartina.tv/api/json/login?login=" + UserName + "&pass=" + UserPassword + "&softid=web-ktv-003";
+    let LoginUrl = "https://iptv.kartina.tv/api/json/login?login=" + UserName + "&pass=" + UserPassword + "&softid=dev-test-000";
     fetch(LoginUrl)
         .then(response => response.json())
         .then(data => {
@@ -67,7 +67,7 @@ function login(UserName, UserPassword) {
 }
 
 async function submit() {
-    let UserName = document.getElementById("code_login").value,
+    const UserName = document.getElementById("code_login").value,
         UserPassword = document.getElementById("code_pass").value;
     login(UserName, UserPassword);
 }
@@ -76,7 +76,7 @@ async function submit() {
 
 
 async function logout() {
-     const url = "https://iptv.kartina.tv/api/json/logout?MW_SSID=" + getCookie('SSID');
+    const url = "https://iptv.kartina.tv/api/json/logout?MW_SSID=" + getCookie('SSID');
     fetch(url)
         .then(response => response.json())
         .then(data => {
@@ -84,6 +84,7 @@ async function logout() {
             document.cookie = '';
             authErr();
         });
+    window.location.href = '/index.html';
 }
 
 function authOK() {
@@ -96,10 +97,10 @@ function authOK() {
     document.getElementById('btlogin').hidden = true;
     document.getElementById('showepg').hidden = false;
     document.getElementById('settings').hidden = false;
-        fetch(`https://iptv.kartina.tv/api/json/settings_set?var=stream_standard&val=hls_h264&MW_SSID=${getCookie('SSID')}`)
+    fetch(`https://iptv.kartina.tv/api/json/settings_set?var=stream_standard&val=hls_h264&MW_SSID=${getCookie('SSID')}`)
         .then(response => response.json())
         .then(data => {
-            console.log("hls - ok!");
+            console.log('HLS ok');
         });
     showEPGv3(); // заполняем епг в3
 }
