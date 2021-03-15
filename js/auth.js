@@ -1,6 +1,21 @@
 let divAlerts = document.getElementById('alerts');
 let input_login = document.getElementById("code_login");
 let input_pass = document.getElementById("code_pass");
+//обработка энтеров
+input_login.addEventListener("keyup", event => {
+    if (event.code === 'Enter') {
+        event.preventDefault();
+        document.getElementById("code_pass").focus();
+        document.getElementById("code_pass").value = '';
+    }
+});
+
+input_pass.addEventListener("keyup", event => {
+    if (event.code === 'Enter') {
+        event.preventDefault();
+        document.getElementById("btlogin").click();
+    }
+});
 // возвращает куки с указанным name,
 // или undefined, если ничего не найдено
 function getCookie(name) {
