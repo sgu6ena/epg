@@ -1,6 +1,6 @@
-let divAlerts = document.getElementById('alerts');
-let input_login = document.getElementById("code_login");
-let input_pass = document.getElementById("code_pass");
+const divAlerts = document.getElementById('alerts');
+const input_login = document.getElementById("code_login");
+const input_pass = document.getElementById("code_pass");
 //обработка энтеров
 input_login.addEventListener("keyup", event => {
     if (event.code === 'Enter') {
@@ -11,6 +11,7 @@ input_login.addEventListener("keyup", event => {
 
 input_pass.addEventListener("keyup", event => {
     if (event.code === 'Enter') {
+
         document.getElementById("btlogin").click();
     }
 });
@@ -98,7 +99,7 @@ async function logout() {
             document.cookie = '';
             authErr();
         });
-    window.location.href = '/index.html';
+    window.location.href = '../index.html';
 }
 
 function authOK() {
