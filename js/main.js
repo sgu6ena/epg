@@ -1,139 +1,3 @@
-
-const divAlerts = document.getElementById('alerts');
-const input_login = document.getElementById("code_login");
-const input_pass = document.getElementById("code_pass");
-//обработка энтеров
-input_login.addEventListener("keyup", event => {
-    if (event.code === 'Enter') {
-        document.getElementById("code_pass").focus();
-        document.getElementById("code_pass").value = '';
-    }
-});
-
-input_pass.addEventListener("keyup", event => {
-    if (event.code === 'Enter') {
-
-        document.getElementById("btlogin").click();
-    }
-});
-
-// возвращает куки с указанным name,
-// или undefined, если ничего не найдено
-function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-}
-//авторизация при загрузке страницы
-window.onload = () => {
-    auth();
-};
-
-function auth() {
-    console.log(getCookie('SSID'));
-    if (getCookie('SSID') != undefined) {
-        account(getCookie('SSID'));
-        console.log('3');
-        //
-    } else {
-        if (getCookie('login') != undefined && getCookie('password') != undefined) {
-            login(getCookie('login'), getCookie('password'));
-            console.log('4');
-        } else {
-            authErr();
-            console.log('5');
-        };
-    };
-}
-
-function account(SSID) {
-    let AccountUrl = "https://iptv.kartina.tv/api/json/account?MW_SSID=" + SSID;
-    fetch(AccountUrl)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                authErr();
-                console.log('1');
-                return (false);
-            } else {
-                authOK();
-                console.log('2');
-                console.log(data);
-                return (true);
-            }
-        });
-}
-
-function login(UserName, UserPassword) {
-    let LoginUrl = "https://iptv.kartina.tv/api/json/login?login=" + UserName + "&pass=" + UserPassword + "&softid=dev-test-000";
-    fetch(LoginUrl)
-        .then(response => response.json())
-        .then(data => {
-            let SSID = data['sid']; //берем MW_SSID
-            if (account(SSID) != false) {
-                document.cookie = "login=" + UserName; //сохраняем в куки логин
-                document.cookie = "password=" + UserPassword; //сохраняем в куки пасс
-                document.cookie = ("SSID=" + SSID); //сохраняем ссид
-            } else {
-                authErr();
-            };
-        });
-    // auth();
-}
-
-async function submit() {
-    const UserName = document.getElementById("code_login").value,
-        UserPassword = document.getElementById("code_pass").value;
-    login(UserName, UserPassword);
-}
-
-
-
-
-async function logout() {
-    const url = "https://iptv.kartina.tv/api/json/logout?MW_SSID=" + getCookie('SSID');
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            document.cookie = '';
-            authErr();
-        });
-    window.location.href = './index.html';
-}
-
-function authOK() {
-    divAlerts.insertAdjacentHTML('beforeend', `<div class="alert alert-success" role="alert">
-    Авторизация успешна!
-    </div>`);
-    setTimeout(function() { divAlerts.innerHTML = ""; }, 2000);
-    document.getElementById("code_login").hidden = true;
-    document.getElementById("code_pass").hidden = true;
-    document.getElementById('btlogin').hidden = true;
-    document.getElementById('showepg').hidden = false;
-    document.getElementById('settings').hidden = false;
-    fetch(`https://iptv.kartina.tv/api/json/settings_set?var=stream_standard&val=hls_h264&MW_SSID=${getCookie('SSID')}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('HLS ok');
-        });
-    showEPGv3(); // заполняем епг в3
-}
-
-function authErr() {
-    divAlerts.insertAdjacentHTML('beforeend', `<div class="alert alert-danger" role="alert">
-    Вам необходимо авторизироваться!
-    </div>`);
-    setTimeout(function() { divAlerts.innerHTML = ""; }, 3000);
-    document.getElementById("code_login").hidden = false;
-    document.getElementById("code_pass").hidden = false;
-    document.getElementById('btlogin').hidden = false;
-    document.getElementById('showepg').hidden = true;
-    document.getElementById('settings').hidden = true;
-
-}
-
 let divEpg = document.getElementById('epg');
 
 let divChannelEpg = document.getElementById('channelEPG');
@@ -181,8 +45,8 @@ function showEpg(channelID, day, channelTitle, channelLogo) {
                     <img src="${channelLogo}" alt="logo" class="logo-chanel-mono">
                     <span class="name-channel-mono">${channelTitle}</span>
                     <span class="id-channel">(${channelID})</span>
-              </div>
-             `);
+                </div>
+                `);
     //<hr class="hr-group">
     fetch(channelURL)
         .then(response => response.json())
@@ -194,7 +58,7 @@ function showEpg(channelID, day, channelTitle, channelLogo) {
                 ${timetonormaldate(dateInUnix(day)).split(',')[0]}
                 <button class="button-date-prev button-date" onclick="showEpg(${channelID},${day+1},'${channelTitle}', '${channelLogo}')">&#9658;</button>
             </div> 
-           `);
+            `);
             if (day > 15 || day < -15) { //проверка 2 недели до/после текущей даты
                 divChannelEpg.insertAdjacentHTML('beforeend', `<img src="https://kubsafety.ru/image/catalog/revolution/404error.jpg" alt="нет программ" style="text-align:center">`);
             } else {
@@ -220,25 +84,39 @@ function showDescription(channelID, time) {
         .then(response => response.json())
         .then(data => {
             let epg = data.epg[0];
-
+            console.log(epg);
             fetch(videoUrl + epg._links.play.path + `?MW_SSID=${getCookie('SSID')}`) // получение ссылки на по воспроизведение + плеер
                 .then(response => response.json())
                 .then(data => {
                     urls = data['url'];
+                    console.log(urls);
                     divShowProgramm.insertAdjacentHTML('beforeend', `
                     <video class="player" id="livevideo" controls src="${urls}"></video>`);
+
                     let video = document.getElementById('livevideo');
-                    let hls = new Hls();
-                    hls.loadSource(video.src); // GC GET VIDEO SRC
+                    let hls = new Hls({
+                        xhrSetup: (xhr, url) => {
+                            xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+                            //  xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+                            //   xhr.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+                        }
+                    });
+                    hls.loadSource(video.src);
                     hls.attachMedia(video);
                     divShowProgramm.insertAdjacentHTML('beforeend', `                   
                     <p class="programm-name">${timetonormal(epg.start)}-${timetonormal(epg.end)} ${epg.title}</p>
-                   <p>${epg.category?epg.category + '.':''} ${epg.genres?epg.genres + '.':''} ${epg.year?epg.year + '.':''}<p>
-                   <span>${epg.description}</span>
-                   `);
+                    <p>${epg.category?epg.category + '.':''} ${epg.genres?epg.genres + '.':''} ${epg.year?epg.year + '.':''}<p>
+                    <span>${epg.description}</span>
+                    `);
                     hls.on(Hls.Events.MANIFEST_PARSED, function() {
                         video.pause();
                     });
+                });
+            fetch(videoUrl + epg._links.archive.path + `?MW_SSID=${getCookie('SSID')}`)
+                .then(response => response.json())
+                .then(data => {
+                    urls = data['url'];
+                    console.log(urls);
                 });
 
 
