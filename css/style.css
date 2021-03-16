@@ -183,3 +183,9 @@ p {
     max-height: 200px;
     display: block;
 }
+
+.live {
+    font-size: 12px;
+    color: gray;
+    text-transform: uppercase;
+}

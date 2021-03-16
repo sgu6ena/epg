@@ -19,10 +19,10 @@ function showEPGv3() {
                 divEpg.insertAdjacentHTML('beforeend', `<hr class="hr-group"> <h3 class="groups-logo">${groups[i].title}</h3><hr class="hr-group">`);
                 for (let j = 0; j < chan.length; j++) {
                     number++;
-
+                    //console.log(chan[j].epg);
                     //номер канала
                     divEpg.insertAdjacentHTML('beforeend', `  
-                    <button class="button-chanel" id="${chan[j].id}"  onclick="showEpg(${chan[j].id},0, '${chan[j].title}', '${chan[j].logo}')">                    
+                    <button class="button-chanel" id="${chan[j].id}"  onclick="showEpg(${chan[j].id},0, '${chan[j].title}', '${chan[j].logo}'); showDescription(${chan[j].id},${chan[j].epg.start},1 );">                    
                             <img src="${chan[j].logo}" alt="logo" class="logo-chanel">
                                 <span class="number-channel">${number}.</span> 
                                 <span class="name-channel">${chan[j].title}</span>
@@ -52,6 +52,7 @@ function showEpg(channelID, day, channelTitle, channelLogo) {
         .then(response => response.json())
         .then(data => {
             let epg = data.epg;
+            //            console.log(epg);
             divChannelEpg.insertAdjacentHTML('beforeend', `
             <div class="change-date">
                 <button class="button-date-prev button-date" onclick="showEpg(${channelID},${day-1},'${channelTitle}', '${channelLogo}')">&#9668;</button>
@@ -59,13 +60,18 @@ function showEpg(channelID, day, channelTitle, channelLogo) {
                 <button class="button-date-prev button-date" onclick="showEpg(${channelID},${day+1},'${channelTitle}', '${channelLogo}')">&#9658;</button>
             </div> 
             `);
-            if (day > 15 || day < -15) { //проверка 2 недели до/после текущей даты
+            if (day > 14 || day < -14) { //проверка 2 недели до/после текущей даты
                 divChannelEpg.insertAdjacentHTML('beforeend', `<img src="https://kubsafety.ru/image/catalog/revolution/404error.jpg" alt="нет программ" style="text-align:center">`);
             } else {
                 for (let i = 0; i < epg.length; i++) {
+                    let arch = "red";
+                    if (epg[i]._links.archive != undefined)
+                        arch = 'blue';
+
+                    //console.log(epg[i].start * 1000, Date.now());
                     divChannelEpg.insertAdjacentHTML('beforeend', `
                 <button class="button-chanel" id="${i}"  onclick="showDescription(${channelID},${epg[i].start})"> 
-                <p class="live-tv">&nbsp;${timetonormal(epg[i].start)}-${timetonormal(epg[i].end)} ${epg[i].title}</p>
+                <p class="live-tv"><span class="icon-record" style="color: ${epg[i].start*1000 < Date.now() ? arch : "white"}; font-size: 16px; font-weight:900;">&#8226;</span>&nbsp;${timetonormal(epg[i].start)}-${timetonormal(epg[i].end)} ${epg[i].title}</p>
                 </button>
                 
                 `);
@@ -75,46 +81,55 @@ function showEpg(channelID, day, channelTitle, channelLogo) {
 }
 
 //выбранная передача: описание + плеер
-function showDescription(channelID, time) {
+function showDescription(channelID, time, live = 0) {
 
     divShowProgramm.innerHTML = "";
     let programmURL = `https://iptv.kartina.tv/api/json/v3/channel/${channelID}/epg?from=${time}&to=${time}&MW_SSID=${getCookie('SSID')}`;
     let videoUrl = `https://iptv.kartina.tv/api/json`
+
     fetch(programmURL)
         .then(response => response.json())
         .then(data => {
             let epg = data.epg[0];
-            console.log(epg);
-            fetch(videoUrl + epg._links.play.path + `?MW_SSID=${getCookie('SSID')}`) // получение ссылки на по воспроизведение + плеер
-                .then(response => response.json())
-                .then(data => {
-                    urls = data['url'];
-                    console.log(urls);
-                    divShowProgramm.insertAdjacentHTML('beforeend', `
-                    <video class="player" id="livevideo" controls src="${urls}"></video>`);
+            console.log(epg._links);
+            if (epg._links.archive != undefined) {
+                playvideo(videoUrl + epg._links.archive.path + `?MW_SSID=${getCookie('SSID')}`, epg, live)
 
-                    let video = document.getElementById('livevideo');
-                    let hls = new Hls();
-                    hls.loadSource(video.src);
-                    hls.attachMedia(video);
-                    divShowProgramm.insertAdjacentHTML('beforeend', `                   
-                    <p class="programm-name">${timetonormal(epg.start)}-${timetonormal(epg.end)} ${epg.title}</p>
-                    <p>${epg.category?epg.category + '.':''} ${epg.genres?epg.genres + '.':''} ${epg.year?epg.year + '.':''}<p>
-                    <span>${epg.description}</span>
-                    `);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                        video.pause();
-                    });
-                });
-            fetch(videoUrl + epg._links.archive.path + `?MW_SSID=${getCookie('SSID')}`)
-                .then(response => response.json())
-                .then(data => {
-                    urls = data['url'];
-                    console.log(urls);
-                });
+            } else { //  console.log(epg);
+                playvideo(videoUrl + epg._links.play.path + `?MW_SSID=${getCookie('SSID')}`, epg, live) // получение ссылки на по воспроизведение + плеер
 
-
+            };
         })
+}
+
+
+
+
+
+function playvideo(url, epg, live = 0) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            urls = data['url'];
+            console.log(urls);
+            divShowProgramm.insertAdjacentHTML('beforeend', `
+                <video class="player" id="livevideo" controls src="${urls}"></video>`);
+
+            let video = document.getElementById('livevideo');
+            let hls = new Hls();
+            hls.loadSource(video.src);
+            hls.attachMedia(video);
+            if (live == 1)
+                divShowProgramm.insertAdjacentHTML('beforeend', `<p class='live'>В прямом эфире</p>`);
+            divShowProgramm.insertAdjacentHTML('beforeend', `                   
+                <p class="programm-name">${timetonormal(epg.start)}-${timetonormal(epg.end)} | ${epg.title}</p>
+                <p>${epg.category?epg.category + '.':''} ${epg.genres?epg.genres + '.':''} ${epg.year?epg.year + '.':''}<p>
+                <span>${epg.description}</span>
+                `);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                video.play();
+            });
+        });
 }
 
 function timetonormal(t) {
