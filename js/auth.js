@@ -90,7 +90,8 @@ async function submit() {
 
 
 
-async function logout() {
+
+function logout() {
     const url = "https://iptv.kartina.tv/api/json/logout?MW_SSID=" + getCookie('SSID');
     fetch(url)
         .then(response => response.json())
@@ -98,10 +99,11 @@ async function logout() {
             console.log(data);
             document.cookie = '';
             authErr();
+
         });
     window.location.href = './index.html';
-}
 
+}
 function authOK() {
     divAlerts.insertAdjacentHTML('beforeend', `<div class="alert alert-success" role="alert">
     Авторизация успешна!
