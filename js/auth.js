@@ -99,7 +99,7 @@ async function logout() {
             document.cookie = '';
             authErr();
         });
-    window.location.href = '../index.html';
+    window.location.href = './index.html';
 }
 
 function authOK() {
