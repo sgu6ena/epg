@@ -89,21 +89,29 @@ async function submit() {
 
 
 
-
-
 function logout() {
     const url = "https://iptv.kartina.tv/api/json/logout?MW_SSID=" + getCookie('SSID');
+    CookiesDelete();
     fetch(url)
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            document.cookie = '';
-            authErr();
-
         });
     window.location.href = './index.html';
 
 }
+
+function CookiesDelete() {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i];
+        let eqPos = cookie.indexOf("=");
+        let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+        document.cookie = name + '=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+}
+
 function authOK() {
     divAlerts.insertAdjacentHTML('beforeend', `<div class="alert alert-success" role="alert">
     Авторизация успешна!
