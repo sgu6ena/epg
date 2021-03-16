@@ -94,13 +94,7 @@ function showDescription(channelID, time) {
                     <video class="player" id="livevideo" controls src="${urls}"></video>`);
 
                     let video = document.getElementById('livevideo');
-                    let hls = new Hls({
-                        xhrSetup: (xhr, url) => {
-                            xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-                            //  xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-                            //   xhr.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-                        }
-                    });
+                    let hls = new Hls();
                     hls.loadSource(video.src);
                     hls.attachMedia(video);
                     divShowProgramm.insertAdjacentHTML('beforeend', `                   
