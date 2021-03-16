@@ -5507,7 +5507,7 @@
                             text: r.message
                         }, t, e)
                     }
-                    t.rangeEnd && e.setRequestHeader("Access-Control-Allow-Origin: *", "Range", "bytes=" + t.rangeStart + "-" + (t.rangeEnd - 1)), e.onreadystatechange = this.readystatechange.bind(this), e.onprogress = this.loadprogress.bind(this), e.responseType = t.responseType, this.requestTimeout = window.setTimeout(this.loadtimeout.bind(this), this.config.timeout), e.send()
+                    t.rangeEnd && e.setRequestHeader("Access-Control-Allow-Origin", "*", "Range", "bytes=" + t.rangeStart + "-" + (t.rangeEnd - 1)), e.onreadystatechange = this.readystatechange.bind(this), e.onprogress = this.loadprogress.bind(this), e.responseType = t.responseType, this.requestTimeout = window.setTimeout(this.loadtimeout.bind(this), this.config.timeout), e.send()
                 }, t.readystatechange = function(e) {
                     var t = e.currentTarget,
                         r = t.readyState,
