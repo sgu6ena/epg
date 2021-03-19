@@ -6,16 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPG V3</title>
+    <title>НАСТРОЙКИ</title>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/switch.css">
 
     <script src="js/auth.js" defer></script>
     <script src="js/main.js" defer></script>
-    <script src="js/hls.js" defer></script>
+    <script src="js/settings.js" defer></script>
 
 </head>
 
@@ -23,18 +24,14 @@
     <header class="header">
         <div class="container-fluid">
             <div class="row d-flex align-items-center p-2 ">
-                <div class="col-md-3">
+                <div class="col-3">
                     <a href="/index.html" class="logo ">
                         <img src="img/logo.svg" alt="KARINA.TV " class="logo-img ">
                     </a>
                 </div>
                 <!-- /.col-6 -->
-                <div class="col-md-9 d-flex justify-content-end ">
-
-
-
+                <div class="col-9 d-flex justify-content-end ">
                     <a href="settings.html" class="setting"> <img src="img/settings.svg" alt="settings" class="settings-icon"> </a>
-
                 </div>
                 <!-- /.col-6 -->
             </div>
@@ -42,11 +39,60 @@
         </div>
     </header>
 
-    <div class="d-flex justify-content-center mt-3">
-        <button type="button " class="btn btn-dark" onclick="logout()" id="settings">                    
-            <img src="img/exit.png" alt="settings" class="settings-icon"> Выход
-        </button>
-        <div>
+    <div class="settings ">
+        <div class="container settings-container">
+
+            <div class="settings-item d-flex align-items-center justify-content-between">
+                <span class='settings-description'>телетека</span>
+                <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
+            </div>
+
+            <div class="settings-item d-flex align-items-center justify-content-between">
+                <span class='settings-description settings-disabled'>запись архива</span>
+                <label class="switch ">
+                        <input type="checkbox" checked disabled>
+                        <span class="slider round "></span>
+                    </label>
+            </div>
+
+
+
+
+            <div class="settings-item ">
+                <span class='settings-description  '>сервер вещания</span>
+                <select class="form-select form-select-lg " aria-label=".form-selectexample">
+                        <option value="1">Europa South</option>
+                        <option value="2">Europa Middle</option>
+                        <option value="3">Europa North</option>
+                        <option value="4">USA East Coast</option>
+                        <option value="5">USA West Coast</option>
+                        <option value="6">USA North</option>
+                        <option value="7">Middle East</option>
+                </select>
+            </div>
+
+
+
+
+            <div class="settings-item  d-flex align-items-center justify-content-center">
+                <span class='settings-description  '>Выйти из абонемента</span>
+                <button type="button " class="btn btn-danger " onclick="logout() " id="settings ">                    
+                        <img src="img/exit.png " alt="settings " class="settings-icon "> Выход
+                    </button>
+            </div>
+
+        </div>
+        <!-- container -->
+    </div>
+
+
+
+
+
+
 </body>
 
 </html>

@@ -11,7 +11,6 @@ input_login.addEventListener("keyup", event => {
 
 input_pass.addEventListener("keyup", event => {
     if (event.code === 'Enter') {
-
         document.getElementById("btlogin").click();
     }
 });

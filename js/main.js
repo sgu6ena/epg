@@ -71,7 +71,11 @@ function showEpg(channelID, day, channelTitle, channelLogo) {
                     //console.log(epg[i].start * 1000, Date.now());
                     divChannelEpg.insertAdjacentHTML('beforeend', `
                 <button class="button-chanel" id="${i}"  onclick="showDescription(${channelID},${epg[i].start})"> 
-                <p class="live-tv"><span class="icon-record" style="color: ${epg[i].start*1000 < Date.now() ? arch : "white"}; font-size: 16px; font-weight:900;">&#8226;</span>&nbsp;${timetonormal(epg[i].start)}-${timetonormal(epg[i].end)} ${epg[i].title}</p>
+                <p class="live-tv">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="${epg[i].start*1000 < Date.now() ? arch : 'white'}" class="bi bi-circle-fill" viewBox="0 0 16 16">
+                        <circle cx="5" cy="5" r="5"/>
+                      </svg>
+               &nbsp;${timetonormal(epg[i].start)}-${timetonormal(epg[i].end)} ${epg[i].title}</p>
                 </button>
                 
                 `);
@@ -91,7 +95,7 @@ function showDescription(channelID, time, live = 0) {
         .then(response => response.json())
         .then(data => {
             let epg = data.epg[0];
-            console.log(epg._links);
+            //console.log(epg._links);
             if (epg._links.archive != undefined) {
                 playvideo(videoUrl + epg._links.archive.path + `?MW_SSID=${getCookie('SSID')}`, epg, live)
 
@@ -111,13 +115,13 @@ function playvideo(url, epg, live = 0) {
         .then(response => response.json())
         .then(data => {
             urls = data['url'];
-            console.log(urls);
+            //console.log(urls);
             divShowProgramm.insertAdjacentHTML('beforeend', `
                 <video class="player" id="livevideo" controls src="${urls}"></video>`);
 
             let video = document.getElementById('livevideo');
             let hls = new Hls();
-            hls.loadSource(video.src);
+            hls.loadSource(urls);
             hls.attachMedia(video);
             if (live == 1)
                 divShowProgramm.insertAdjacentHTML('beforeend', `<p class='live'>В прямом эфире</p>`);
@@ -127,7 +131,7 @@ function playvideo(url, epg, live = 0) {
                 <span>${epg.description}</span>
                 `);
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                video.play();
+                video.pause();
             });
         });
 }

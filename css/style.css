@@ -3,9 +3,17 @@
     height: 93vh;
 }
 
+.chanel-list::-webkit-scrollbar {
+    width: 0;
+}
+
 .channelEPG {
     overflow: auto;
     height: 93vh;
+}
+
+.channelEPG::-webkit-scrollbar {
+    width: 0;
 }
 
 .button-chanel {
