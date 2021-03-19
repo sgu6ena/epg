@@ -117,7 +117,7 @@ function playvideo(url, epg, live = 0) {
             urls = data['url'];
             //console.log(urls);
             divShowProgramm.insertAdjacentHTML('beforeend', `
-                <video class="player" id="livevideo" controls src="${urls}"></video>`);
+                <video class="player" id="livevideo" controls ></video>`);
 
             let video = document.getElementById('livevideo');
             let hls = new Hls();
