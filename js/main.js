@@ -48,7 +48,7 @@ function showEpg(channelID, day, channelTitle, channelLogo) {
                 </div>
                 `);
     //<hr class="hr-group">
-    fetch(channelURL)
+    fetch(channelURL, { mode: 'no - cors', })
         .then(response => response.json())
         .then(data => {
             let epg = data.epg;
