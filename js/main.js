@@ -111,7 +111,7 @@ function showDescription(channelID, time, live = 0) {
 
 
 function playvideo(url, epg, live = 0) {
-    fetch(url, { mode: 'no-cors'})
+    fetch(url)
         .then(response => response.json())
         .then(data => {
             urls = data['url'];
