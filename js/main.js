@@ -48,7 +48,7 @@ function showEpg(channelID, day, channelTitle, channelLogo) {
                 </div>
                 `);
     //<hr class="hr-group">
-    fetch(channelURL, { mode: 'no - cors', })
+    fetch(channelURL)
         .then(response => response.json())
         .then(data => {
             let epg = data.epg;
@@ -111,7 +111,7 @@ function showDescription(channelID, time, live = 0) {
 
 
 function playvideo(url, epg, live = 0) {
-    fetch(url)
+    fetch(url, , { mode: 'no-cors', })
         .then(response => response.json())
         .then(data => {
             urls = data['url'];
